@@ -9,7 +9,7 @@ import './index.css';
 // import App from './App4';
 // import App from './App5';
 // import App from './App6';
-import App from './App7';
+import App from './App8';
 
 // ReactDOM.render(<KeepAliveProvider include="detail, list"><App /></KeepAliveProvider>, document.getElementById('root'));
 

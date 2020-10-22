@@ -6,17 +6,18 @@ import {
 } from 'antd';
 
 class DetailPage extends React.PureComponent {
-  state = {
-    num: 1
+  constructor(props) {
+    super(props)
+    this.state = {
+      num: props.match.params.id
+    }
   }
-  componentDidMount() {
-    console.log(this.props.match);
-  }
+
   onBack = () => {
     this.props.history.goBack();
   }
   onGotoDetail = () => {
-    const index = (Math.random() + '')[2]
+    const index = (Math.random() + '').slice(2, 5)
     this.props.history.push(`/detail/${index}`)
   }
 
@@ -25,7 +26,7 @@ class DetailPage extends React.PureComponent {
     return (
       <div style={styles.container}>
         <h1 style={styles.titleText}>This is DetailPage</h1>
-        <h1 style={styles.titleText} onClick={() => this.setState({ num: num + 1 })}>{num}</h1>
+        <h1 style={styles.titleText} onClick={() => this.setState({ num: ~~num + 1 })}>{num}</h1>
         <div style={styles.btnGroup}>
           <Button onClick={this.onGotoDetail} type="primary">goTo Other Detail</Button>
         </div>

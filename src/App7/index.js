@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { lazy, Suspense } from 'react';
-import { RouterConfig, getMatchRouter } from './RouteConfig';
-
 import {
   Route,
   Switch,
@@ -10,8 +8,13 @@ import {
 } from 'react-router-dom';
 import { Spin } from 'antd'
 import './index.css';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import { HomePage, AboutPage } from '../Pages/index';
+const DetailPage = lazy(() => import('../Pages/DetailPage'))
+const ListPage = lazy(async () => {
+  await new Promise(resolve => window.setTimeout(resolve, 300))
+  return import('../Pages/ListPage')
+})
 let needAnimation = true // 控制滑动自带动画冲突
 
 window.addEventListener('touchstart', e => {
@@ -24,45 +27,39 @@ window.addEventListener('touchend', e => {
   needAnimation = true
 })
 
-// 通过判断两个路由配置的index，来计算出使用前进还是后退的动画
-const getClassName = (location, oldLocation) => {
-  // 根据前后两个页面的location.pathname,得到对应的配置自定义参数meta
-  const currentRoute = getMatchRouter(location.pathname, RouterConfig) || {};
-  const oldRoute = getMatchRouter(oldLocation.pathname, RouterConfig) || {};
-  const currentIndex = currentRoute.meta && currentRoute.meta.index
-  const oldIndex = oldRoute.meta && oldRoute.meta.index
-  if(!needAnimation) return ''
-  return oldIndex > currentIndex ? 'back' : 'forward'
-}
+const ANIMATION_MAP = needAnimation => ({
+  PUSH: needAnimation ? 'forward' : '',
+  POP: needAnimation ? 'back' : '',
+  REPLACE: 'forward'
+})
 
-let oldLocation = {}
-const Routes = withRouter(({location, history, match}) => {
-  const classNames = getClassName(location, oldLocation);
-  // 更新旧location
-  oldLocation = location;
-  return <TransitionGroup
+const Routes = withRouter(({location, history}) => (
+  <TransitionGroup
+    className="router-wrapper"
     childFactory={child => React.cloneElement(
       child,
-      { classNames }
+      {classNames: ANIMATION_MAP(needAnimation)[history.action]}
     )}
   >
-    <CSSTransition timeout={1500} key={location.pathname} >
+    <CSSTransition
+      timeout={500}
+      key={location.pathname}
+    >
       <div>
         <Suspense fallback={<Spin/>}>
           <Switch location={location}>
-            {
-              RouterConfig.map((config, index) => (
-                <Route exact key={index} {...config}/>
-              ))
-            }
+            <Route exact path={'/'} component={HomePage} />
+            <Route exact path={'/about'} component={AboutPage} />
+            <Route exact path={'/list'} render={props => <ListPage {...props}/>} />
+            <Route exact path={'/detail/:id(\\d+)'} render={props => <DetailPage {...props}/>}/>
           </Switch>
         </Suspense>
       </div>
     </CSSTransition>
   </TransitionGroup>
-});
+));
 
 
-export default props => <BrowserRouter>
-  <Routes {...props}/>
+export default () => <BrowserRouter hashType="noslash">
+  <Routes/>
 </BrowserRouter>

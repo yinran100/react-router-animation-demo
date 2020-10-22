@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   List,
   Button
@@ -7,19 +6,19 @@ import {
 
 const LIST_DATA = new Array(15).fill(1);
 
-export default class ListPage extends React.PureComponent {
+class ListPage extends React.PureComponent {
 
   onBack = () => {
     this.props.history.goBack();
   }
 
-  onClickListItem = () => {
-    this.props.history.push({pathname: 'detail'});
+  onClickListItem = index => {
+    this.props.history.push({pathname: `/detail/${index}`});
   }
 
   renderListItem = (item, index) => {
     return (
-      <List.Item onClick={this.onClickListItem}>
+      <List.Item onClick={() => this.onClickListItem(index)}>
         <span style={styles.listItemText}>Item {index + 1}</span>
       </List.Item>
     );
@@ -41,6 +40,7 @@ export default class ListPage extends React.PureComponent {
     );
   }
 }
+export default ListPage
 
 const styles = {
   container: {
@@ -49,7 +49,7 @@ const styles = {
     // top: 0,
     // width: '100vw',
     // height: '100vh',
-    padding: '0 20px',
+    padding: '0 20px 20px',
     backgroundColor: '#9A4538'
   },
   titleText: {

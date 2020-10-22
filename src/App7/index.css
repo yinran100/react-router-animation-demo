@@ -1,59 +1,42 @@
-.router-wrapper {
-  /* touch-action: none; */
-}
-
-.forward-enter {
+.forward-enter, .forward-exit,
+.back-enter, .back-exit {
   position: absolute !important;
   top: 0;
   width: 100%;
+}
+.forward-enter-active, .forward-exit-active,
+.back-enter-active, .back-exit-active{
+  transition: all 1500ms;
+  touch-action: none;
+}
+.forward-enter {
   transform: translateX(100%);
 }
 
 .forward-enter-active {
-  touch-action: none;
-  overflow: hidden;
   transform: translateX(0);
-  transition: all 6000ms;
 }
 
 .forward-exit {
-  position: absolute !important;
-  top: 0;
-  width: 100%;
   transform: translateX(0);
 }
 
 .forward-exit-active {
-  touch-action: none;
-  overflow: hidden;
   transform: translateX(-100%);
-  transition: all 6000ms;
 }
 
 .back-enter {
-  position: absolute !important;
-  top: 0;
-  width: 100%;
   transform: translateX(-100%);
 }
 
 .back-enter-active {
-  touch-action: none;
-  overflow: hidden;
   transform: translateX(0);
-  transition: all 6000ms;
 }
 
 .back-exit {
-  position: absolute !important;
-  top: 0;
-  width: 100%;
   transform: translateX(0);
 }
 
 .back-exit-active {
-  touch-action: none;
-  overflow: hidden;
-  transform: translate(100%);
-  transition: all 6000ms;
+  transform: translateX(100%);
 }

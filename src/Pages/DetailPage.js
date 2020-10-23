@@ -23,8 +23,12 @@ class DetailPage extends React.PureComponent {
 
   render() {
     const { num } = this.state
+    const { history } = this.props
     return (
       <div style={styles.container}>
+        <div style={styles.btnGroup}>
+          <Button onClick={() => history.push('/')} type="danger">Home</Button>
+        </div>
         <h1 style={styles.titleText}>This is DetailPage</h1>
         <h1 style={styles.titleText} onClick={() => this.setState({ num: ~~num + 1 })}>{num}</h1>
         <div style={styles.btnGroup}>
@@ -58,6 +62,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20
+    paddingTop: 20
   }
 }

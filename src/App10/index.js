@@ -28,12 +28,13 @@ window.addEventListener('touchend', e => {
 })
 const routerStack = []
 const getClassName = location => {
-  if(!needAnimation) return ''
   const index = routerStack.lastIndexOf(location.pathname)
   const isLastRoute = index >= 0 && index === routerStack.length - 2
   const className = isLastRoute ? 'back' : 'forward'
   if (isLastRoute) routerStack.pop()
   else routerStack.push(location.pathname)
+  console.log(location.pathname, [...routerStack])
+  if(!needAnimation) return ''
   return className
 }
 const Routes = withRouter(({location, history}) => {

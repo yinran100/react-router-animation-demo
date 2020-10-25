@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
+// 配置页面层级的解决方案
 import React, { lazy, Suspense } from 'react';
 import { RouterConfig, getMatchRouter } from './RouteConfig';
 
 import {
   Route,
   Switch,
-  withRouter,
   BrowserRouter
 } from 'react-router-dom';
 import { Spin } from 'antd'
@@ -14,15 +14,19 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 let needAnimation = true // 控制滑动自带动画冲突
 
+const delayReset = () => { // 延后重置控制参数
+  setTimeout(() => {
+    needAnimation = true
+  }, 16)
+}
 window.addEventListener('touchstart', e => {
   needAnimation = true
 })
 window.addEventListener('touchmove', e => {
   needAnimation = false
 })
-window.addEventListener('touchend', e => {
-  needAnimation = true
-})
+window.addEventListener('touchend', delayReset)
+
 
 // 通过判断两个路由配置的index，来计算出使用前进还是后退的动画
 const getClassName = (location, oldLocation) => {
@@ -31,14 +35,14 @@ const getClassName = (location, oldLocation) => {
   const oldRoute = getMatchRouter(oldLocation.pathname, RouterConfig) || {};
   const currentIndex = currentRoute.meta && currentRoute.meta.index
   const oldIndex = oldRoute.meta && oldRoute.meta.index
-  if(!needAnimation || oldIndex === currentIndex) return ''
+  if(!needAnimation || oldIndex === currentIndex) return '' // 同级跳转，或者滑动中，不执行动画
   return oldIndex > currentIndex ? 'back' : 'forward'
 }
 
 let oldLocation = {}
-const Routes = withRouter(({location, history, match}) => {
+const render = ({location, history, match}) => {
   const classNames = getClassName(location, oldLocation);
-  // console.log(classNames)
+  delayReset() // 防止某些浏览器不触发touchend
   // 更新旧location
   oldLocation = location;
   return <TransitionGroup
@@ -62,9 +66,8 @@ const Routes = withRouter(({location, history, match}) => {
       </div>
     </CSSTransition>
   </TransitionGroup>
-});
-
+}
 
 export default props => <BrowserRouter>
-  <Routes {...props}/>
+  <Route path='/' render={render}/>
 </BrowserRouter>

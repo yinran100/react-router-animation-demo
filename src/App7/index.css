@@ -6,7 +6,7 @@
 }
 .forward-enter-active, .forward-exit-active,
 .back-enter-active, .back-exit-active{
-  transition: all 500ms;
+  transition: all 300ms;
   touch-action: none;
 }
 .forward-enter {

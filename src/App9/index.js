@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
+// 记录页面跳转的解决方案
 import React, { lazy, Suspense } from 'react';
 import {
   Route,
   Switch,
-  withRouter,
   BrowserRouter
 } from 'react-router-dom';
 import { Spin } from 'antd'
@@ -17,15 +17,19 @@ const ListPage = lazy(async () => {
 })
 let needAnimation = true // 控制滑动自带动画冲突
 
+const delayReset = () => { // 延后重置控制参数
+  setTimeout(() => {
+    needAnimation = true
+  }, 16)
+}
 window.addEventListener('touchstart', e => {
   needAnimation = true
 })
 window.addEventListener('touchmove', e => {
   needAnimation = false
 })
-window.addEventListener('touchend', e => {
-  needAnimation = true
-})
+window.addEventListener('touchend', delayReset)
+
 const routerStack = []
 const getClassName = location => {
   if(!needAnimation) return ''
@@ -36,8 +40,9 @@ const getClassName = location => {
   else routerStack.push(location.pathname)
   return className
 }
-const Routes = withRouter(({location, history}) => {
-  const classNames = getClassName(location);
+const render = ({location, history}) => {
+  const classNames = getClassName(location)
+  delayReset() // 防止某些浏览器不触发touchend
   return <TransitionGroup
     className="router-wrapper"
     childFactory={child => React.cloneElement(
@@ -61,9 +66,9 @@ const Routes = withRouter(({location, history}) => {
       </div>
     </CSSTransition>
   </TransitionGroup>
-});
+}
 
 
 export default () => <BrowserRouter hashType="noslash">
-  <Routes/>
+  <Route path='/' render={render}/>
 </BrowserRouter>

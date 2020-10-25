@@ -40,9 +40,11 @@ const getClassName = (location, oldLocation) => {
 }
 
 let oldLocation = {}
-const render = ({location, history, match}) => {
+window.onpopstate = console.log
+const render = ({location, history}) => {
   const classNames = getClassName(location, oldLocation);
   delayReset() // 防止某些浏览器不触发touchend
+  console.log(history.length, history.action)
   // 更新旧location
   oldLocation = location;
   return <TransitionGroup

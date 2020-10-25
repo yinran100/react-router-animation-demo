@@ -4,7 +4,7 @@ import React, { lazy, Suspense } from 'react';
 import {
   Route,
   Switch,
-  BrowserRouter
+  BrowserRouter, HashRouter
 } from 'react-router-dom';
 import { Spin } from 'antd'
 import './index.css';
@@ -30,7 +30,8 @@ window.addEventListener('touchmove', e => {
 })
 window.addEventListener('touchend', delayReset)
 
-const routerStack = []
+const routerStack = (sessionStorage.getItem('ROUTER_STACK') || '').split(',').filter(Boolean)
+
 const getClassName = location => {
   if(!needAnimation) return ''
   const index = routerStack.lastIndexOf(location.pathname)
@@ -38,6 +39,7 @@ const getClassName = location => {
   const className = isLastRoute ? 'back' : 'forward'
   if (isLastRoute) routerStack.pop()
   else routerStack.push(location.pathname)
+  sessionStorage.setItem('ROUTER_STACK', routerStack.join())
   return className
 }
 const render = ({location, history}) => {
@@ -69,6 +71,6 @@ const render = ({location, history}) => {
 }
 
 
-export default () => <BrowserRouter hashType="noslash">
+export default () => <HashRouter>
   <Route path='/' render={render}/>
-</BrowserRouter>
+</HashRouter>

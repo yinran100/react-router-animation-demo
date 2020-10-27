@@ -1,5 +1,5 @@
 ## 说明
-本仓库是从源仓库[SmallStoneSK/react-router-animation-demo](https://github.com/SmallStoneSK/react-router-animation-demo)中fork出来的，作者写了一篇文章[一次react-router + react-transition-group实现转场动画的探索](https://juejin.im/post/6844903818073899022)来讲解了其实现过程，在这里，是为了讲解一些关于一般开发者没有解决的问题，是对这一功能点的补充。
+本仓库是从源仓库[SmallStoneSK/react-router-animation-demo](https://github.com/SmallStoneSK/react-router-animation-demo)中fork出来的，作者写了一篇文章[一次react-router + react-transition-group实现转场动画的探索](https://juejin.im/post/6844903818073899022)来讲解了其实现过程，在这里，是为了讲解一些关于一般开发者没有解决的问题，是对这一功能点的补充。[文章地址](https://juejin.im/post/6887471865720209415)
 
 ## 使用
 

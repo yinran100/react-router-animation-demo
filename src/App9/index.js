@@ -34,12 +34,13 @@ const routerStack = (sessionStorage.getItem('ROUTER_STACK') || '').split(',').fi
 
 const getClassName = location => {
   if(!needAnimation) return ''
-  const index = routerStack.lastIndexOf(location.pathname)
-  const isLastRoute = index >= 0 && index === routerStack.length - 2
+  const index = routerStack.lastIndexOf(location.pathname) // 这里要找出现的最后一条记录
+  if (index >= 0 && routerStack.length - 1 === index) return 'forward' // 重复打开同样的路由不增加记录
+  const isLastRoute = index >= 0 && index === routerStack.length - 2 // 存在且是上一页
   const className = isLastRoute ? 'back' : 'forward'
   if (isLastRoute) routerStack.pop()
   else routerStack.push(location.pathname)
-  sessionStorage.setItem('ROUTER_STACK', routerStack.join())
+  sessionStorage.setItem('ROUTER_STACK', routerStack.join()) // 更改后随时保存
   return className
 }
 const render = ({location, history}) => {

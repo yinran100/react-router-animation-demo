@@ -33,14 +33,14 @@ window.addEventListener('touchend', delayReset)
 const routerStack = (sessionStorage.getItem('ROUTER_STACK') || '').split(',').filter(Boolean)
 
 const getClassName = location => {
-  if(!needAnimation) return ''
-  const index = routerStack.lastIndexOf(location.pathname) // 这里要找出现的最后一条记录
+  if (!needAnimation) return ''
+  const pathname = location.pathname.split('?')[0] // 防止？参数影响匹配
+  const index = routerStack.lastIndexOf(pathname) // 这里要找出现的最后一条记录
   if (index >= 0 && routerStack.length - 1 === index) return 'forward' // 重复打开同样的路由不增加记录
   const isLastRoute = index >= 0 && index === routerStack.length - 2 // 存在且是上一页
   const className = isLastRoute ? 'back' : 'forward'
   if (isLastRoute) routerStack.pop()
-  else routerStack.push(location.pathname)
-  sessionStorage.setItem('ROUTER_STACK', routerStack.join()) // 更改后随时保存
+  else routerStack.push(pathname)
   return className
 }
 const render = ({location, history}) => {
